@@ -3,342 +3,246 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bingo </title>
-    <link rel="stylesheet" href="styles.css">
+    <title>Unique Bingo Board</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .bingo-board {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 5px;
+            width: 100%;
+            margin-bottom: 20px;
+            border: 2px solid blue;
+            padding: 10px;
+            background-color: #f8f9fa;
+        }
+        .bingo-board div {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border: 1px solid blue;
+            background-color: #fff;
+            cursor: pointer;
+        }
+        .bingo-board .header {
+            font-weight: bold;
+        }
+        .bingo-board .header-b {
+            background-color: red; /* Red */
+            color: white;
+        }
+        .bingo-board .header-i {
+            background-color: #ffa500; /* Orange */
+            color: white;
+        }
+        .bingo-board .header-n {
+            background-color: #ffff00; /* Yellow */
+            color: black;
+        }
+        .bingo-board .header-g {
+            background-color: #008000; /* Green */
+            color: white;
+        }
+        .bingo-board .header-o {
+            background-color: #0000ff; /* Blue */
+            color: white;
+        }
+        .bingo-board .free {
+            background-color: aqua;
+            color: white;
+        }
+        .board-title {
+            grid-column: span 5;
+            text-align: center;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .bingo-board .selected {
+            background-color: aqua;
+            color: white;
+        }
+        .custom-select-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(50px, 1fr));
+            gap: 5px;
+        }
+        .custom-select-container label {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 40px;
+            border: 1px solid blue;
+            background-color: #fff;
+            cursor: pointer;
+        }
+        .custom-select-container input[type="checkbox"] {
+            display: none;
+        }
+        .custom-select-container input[type="checkbox"]:checked + label {
+            background-color: aqua;
+            color: white;
+        }
+        .hide {
+            display: none;
+        }
+    </style>
 </head>
-<body>
+<body class="bg-light">
     <div class="container">
-        <h1>Bingo </h1>
-        
-        </div>
-        <div id="board-selection">
-            <h2>Select Your Board</h2>
-        </div>
-        <div class="p-10 w-full max-w-6xl mx-auto flex">
-            <!-- Number Grid (Bingo Cards) -->
-            <div class="w-2/3">
-                <div class="number-grid mb-5">
-                                            <button type="button" class="number-button" data-card-id="1">
-                            1
-                        </button>
-                                            <button type="button" class="number-button" data-card-id="2">
-                            2
-                        </button>
-                                            <button type="button" class="number-button" data-card-id="3">
-                            3
-                        </button>
-                                            <button type="button" class="number-button" data-card-id="4">
-                            4
-                        </button>
-                                            <button type="button" class="number-button" data-card-id="5">
-                            5
-                        </button>
-                                            <button type="button" class="number-button" data-card-id="6">
-                            6
-                        </button>
-                                            <button type="button" class="number-button" data-card-id="7">
-                            7
-                        </button>
-                                            <button type="button" class="number-button" data-card-id="8">
-                            8
-                        </button>
-                                            <button type="button" class="number-button" data-card-id="9">
-                            9
-                        </button>
-                                            <button type="button" class="number-button" data-card-id="10">
-                            10
-                        </button>
-                                            <button type="button" class="number-button" data-card-id="11">
-                            11
-                        </button>
-                                            <button type="button" class="number-button" data-card-id="12">
-                            12
-                        </button>
-                                            <button type="button" class="number-button" data-card-id="13">
-                            13
-                        </button>
-                                            <button type="button" class="number-button" data-card-id="14">
-                            14
-                        </button>
-                                            <button type="button" class="number-button" data-card-id="15">
-                            15
-                        </button>
-                                            <button type="button" class="number-button" data-card-id="16">
-                            16
-                        </button>
-                                            <button type="button" class="number-button" data-card-id="17">
-                            17
-                        </button>
-                                            <button type="button" class="number-button" data-card-id="18">
-                            18
-                        </button>
-                                            <button type="button" class="number-button" data-card-id="19">
-                            19
-                        </button>
-                                            <button type="button" class="number-button" data-card-id="20">
-                            20
-                        </button>
-                                            <button type="button" class="number-button" data-card-id="21">
-                            21
-                        </button>
-                                            <button type="button" class="number-button" data-card-id="22">
-                            22
-                        </button>
-                                            <button type="button" class="number-button" data-card-id="23">
-                            23
-                        </button>
-                                            <button type="button" class="number-button" data-card-id="24">
-                            24
-                        </button>
-                                            <button type="button" class="number-button" data-card-id="25">
-                            25
-                        </button>
-                                            <button type="button" class="number-button" data-card-id="26">
-                            26
-                        </button>
-                                            <button type="button" class="number-button" data-card-id="27">
-                            27
-                        </button>
-                                            <button type="button" class="number-button" data-card-id="28">
-                            28
-                        </button>
-                                            <button type="button" class="number-button" data-card-id="29">
-                            29
-                        </button>
-                                            <button type="button" class="number-button" data-card-id="30">
-                            30
-                        </button>
-                                            <button type="button" class="number-button" data-card-id="31">
-                            31
-                        </button>
-                                            <button type="button" class="number-button" data-card-id="32">
-                            32
-                        </button>
-                                            <button type="button" class="number-button" data-card-id="33">
-                            33
-                        </button>
-                                            <button type="button" class="number-button" data-card-id="34">
-                            34
-                        </button>
-                                            <button type="button" class="number-button" data-card-id="35">
-                            35
-                        </button>
-                                            <button type="button" class="number-button" data-card-id="36">
-                            36
-                        </button>
-                                            <button type="button" class="number-button" data-card-id="37">
-                            37
-                        </button>
-                                            <button type="button" class="number-button" data-card-id="38">
-                            38
-                        </button>
-                                            <button type="button" class="number-button" data-card-id="39">
-                            39
-                        </button>
-                                            <button type="button" class="number-button" data-card-id="40">
-                            40
-                        </button>
-                                            <button type="button" class="number-button" data-card-id="41">
-                            41
-                        </button>
-                                            <button type="button" class="number-button" data-card-id="42">
-                            42
-                        </button>
-                                            <button type="button" class="number-button" data-card-id="43">
-                            43
-                        </button>
-                                            <button type="button" class="number-button" data-card-id="44">
-                            44
-                        </button>
-                                            <button type="button" class="number-button" data-card-id="45">
-                            45
-                        </button>
-                                            <button type="button" class="number-button" data-card-id="46">
-                            46
-                        </button>
-                                            <button type="button" class="number-button" data-card-id="47">
-                            47
-                        </button>
-                                            <button type="button" class="number-button" data-card-id="48">
-                            48
-                        </button>
-                                            <button type="button" class="number-button" data-card-id="49">
-                            49
-                        </button>
-                                            <button type="button" class="number-button" data-card-id="50">
-                            50
-                        </button>
-                                            <button type="button" class="number-button" data-card-id="51">
-                            51
-                        </button>
-                                            <button type="button" class="number-button" data-card-id="52">
-                            52
-                        </button>
-                                            <button type="button" class="number-button" data-card-id="53">
-                            53
-                        </button>
-                                            <button type="button" class="number-button" data-card-id="54">
-                            54
-                        </button>
-                                            <button type="button" class="number-button" data-card-id="55">
-                            55
-                        </button>
-                                            <button type="button" class="number-button" data-card-id="56">
-                            56
-                        </button>
-                                            <button type="button" class="number-button" data-card-id="57">
-                            57
-                        </button>
-                                            <button type="button" class="number-button" data-card-id="58">
-                            58
-                        </button>
-                                            <button type="button" class="number-button" data-card-id="59">
-                            59
-                        </button>
-                                            <button type="button" class="number-button" data-card-id="60">
-                            60
-                        </button>
-                                            <button type="button" class="number-button" data-card-id="61">
-                            61
-                        </button>
-                                            <button type="button" class="number-button" data-card-id="62">
-                            62
-                        </button>
-                                            <button type="button" class="number-button" data-card-id="63">
-                            63
-                        </button>
-                                            <button type="button" class="number-button" data-card-id="64">
-                            64
-                        </button>
-                                            <button type="button" class="number-button" data-card-id="65">
-                            65
-                        </button>
-                                            <button type="button" class="number-button" data-card-id="66">
-                            66
-                        </button>
-                                            <button type="button" class="number-button" data-card-id="67">
-                            67
-                        </button>
-                                            <button type="button" class="number-button" data-card-id="68">
-                            68
-                        </button>
-                                            <button type="button" class="number-button" data-card-id="69">
-                            69
-                        </button>
-                                            <button type="button" class="number-button" data-card-id="70">
-                            70
-                        </button>
-                                            <button type="button" class="number-button" data-card-id="71">
-                            71
-                        </button>
-                                            <button type="button" class="number-button" data-card-id="72">
-                            72
-                        </button>
-                                            <button type="button" class="number-button" data-card-id="73">
-                            73
-                        </button>
-                                            <button type="button" class="number-button" data-card-id="74">
-                            74
-                        </button>
-                                            <button type="button" class="number-button" data-card-id="75">
-                            75
-                        </button>
-                                            <button type="button" class="number-button" data-card-id="76">
-                            76
-                        </button>
-                                            <button type="button" class="number-button" data-card-id="77">
-                            77
-                        </button>
-                                            <button type="button" class="number-button" data-card-id="78">
-                            78
-                        </button>
-                                            <button type="button" class="number-button" data-card-id="79">
-                            79
-                        </button>
-                                            <button type="button" class="number-button" data-card-id="80">
-                            80
-                        </button>
-                                            <button type="button" class="number-button" data-card-id="81">
-                            81
-                        </button>
-                                            <button type="button" class="number-button" data-card-id="82">
-                            82
-                        </button>
-                                            <button type="button" class="number-button" data-card-id="83">
-                            83
-                        </button>
-                                            <button type="button" class="number-button" data-card-id="84">
-                            84
-                        </button>
-                                            <button type="button" class="number-button" data-card-id="85">
-                            85
-                        </button>
-                                            <button type="button" class="number-button" data-card-id="86">
-                            86
-                        </button>
-                                            <button type="button" class="number-button" data-card-id="87">
-                            87
-                        </button>
-                                            <button type="button" class="number-button" data-card-id="88">
-                            88
-                        </button>
-                                            <button type="button" class="number-button" data-card-id="89">
-                            89
-                        </button>
-                                            <button type="button" class="number-button" data-card-id="90">
-                            90
-                        </button>
-                                            <button type="button" class="number-button" data-card-id="91">
-                            91
-                        </button>
-                                            <button type="button" class="number-button" data-card-id="92">
-                            92
-                        </button>
-                                            <button type="button" class="number-button" data-card-id="93">
-                            93
-                        </button>
-                                            <button type="button" class="number-button" data-card-id="94">
-                            94
-                        </button>
-                                            <button type="button" class="number-button" data-card-id="95">
-                            95
-                        </button>
-                                            <button type="button" class="number-button" data-card-id="96">
-                            96
-                        </button>
-                                            <button type="button" class="number-button" data-card-id="97">
-                            97
-                        </button>
-                                            <button type="button" class="number-button" data-card-id="98">
-                            98
-                        </button>
-                                            <button type="button" class="number-button" data-card-id="99">
-                            99
-                        </button>
-                                            <button type="button" class="number-button" data-card-id="100">
-                            100
-                        </button>
-                                    </div>
+        <h1 class="text-center my-4">Boards</h1>
+        <div class="row">
+            <div class="col-md-6 offset-md-3">
+                <div id="board-select-container" class="custom-select-container mb-4"></div>
+                <div class="text-center mb-4">
+                    <button id="play-button" class="btn btn-primary">Play</button>
+                </div>
+                <div id="selected-board" class="hide">
+                    <h2 class="board-title text-center bg-primary text-white rounded py-1">Selected Boards</h2>
+                    <div id="boards-container"></div>
+                    <div class="text-center mt-4">
+                        <a href="selection.html" class="btn btn-secondary">Go back to Board Selection</a>
+                    </div>
+                </div>
             </div>
-     
-                             <div>
-                            <label class="block mb-2 text-sm font-medium text-white">Bingo Type</label>
-                            <input type="text" class="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg block w-full p-2.5 placeholder-gray-400" placeholder="75 Bingo" style="width: 250px" disabled="">
-                        </div>
-                        <div>
-                            <label for="bet_amount" class="block mb-2 text-sm font-medium text-white">Bet amount</label>
-                            <input type="text" id="bet_amount" name="bet_amount" class="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg block w-full p-2.5 placeholder-gray-400" placeholder="Enter bet amount" style="width: 250px" value="" required="">
-                        </div>
-                    <input type="hidden" name="selected_numbers" id="selected_numbers">
-                    <input type="hidden" name="number_of_selected_numbers" id="number_of_selected_numbers">
-                    <input type="hidden" name="total_amount" id="total_amount" value="0">
+        </div>
+    </div>
 
-                    <button type="submit" id="createGameButton" style="background-color: #019DD6;" class="w-full text-gray-100 font-bold py-2 px-4 rounded mt-4" disabled="">
-                        Create Game
-                    </button>
-                </form>
+    <script>
+        function shuffle(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
 
-                <button id="reset-button" class="w-full text-gray-100 font-bold py-2 px-4 rounded mt-4" style="background-color: red;">Reset Board</button>
-    <script src="script.js"></script>
+        function generateBingoBoard() {
+            const board = [];
+
+            // Define number ranges for each column
+            const ranges = [
+                Array.from({ length: 15 }, (_, i) => i + 1),  // B column: 1-15
+                Array.from({ length: 15 }, (_, i) => i + 16), // I column: 16-30
+                Array.from({ length: 15 }, (_, i) => i + 31), // N column: 31-45
+                Array.from({ length: 15 }, (_, i) => i + 46), // G column: 46-60
+                Array.from({ length: 15 }, (_, i) => i + 61)  // O column: 61-75
+            ];
+
+            // Shuffle each range
+            ranges.forEach(range => shuffle(range));
+
+            // Create the board using the shuffled numbers
+            for (let i = 0; i < 5; i++) {
+                const row = [];
+                for (let j = 0; j < 5; j++) {
+                    if (i === 2 && j === 2) {
+                        row.push('FREE');
+                    } else {
+                        row.push(ranges[j][i]);
+                    }
+                }
+                board.push(row);
+            }
+
+            return board;
+        }
+
+        function transposeBoard(board) {
+            const transposedBoard = [];
+
+            for (let i = 0; i < 5; i++) {
+                const row = [];
+                for (let j = 0; j < 5; j++) {
+                    row.push(board[j][i]);
+                }
+                transposedBoard.push(row);
+            }
+
+            return transposedBoard;
+        }
+
+        function renderBingoBoard(board, index) {
+            const boardContainer = document.createElement('div');
+            boardContainer.classList.add('bingo-board', 'shadow-sm', 'rounded', 'mb-4');
+            
+            const headers = ['B', 'I', 'N', 'G', 'O'];
+            const headerClasses = ['header-b', 'header-i', 'header-n', 'header-g', 'header-o'];
+            headers.forEach((header, index) => {
+                const headerCell = document.createElement('div');
+                headerCell.textContent = header;
+                headerCell.classList.add('header', headerClasses[index]);
+                boardContainer.appendChild(headerCell);
+            });
+
+            for (let i = 0; i < 5; i++) {
+                for (let j = 0; j < 5; j++) {
+                    const cellElement = document.createElement('div');
+                    cellElement.textContent = board[i][j];
+                    if (board[i][j] === 'FREE') {
+                        cellElement.classList.add('free');
+                    }
+                    cellElement.addEventListener('click', toggleSelection);
+                    boardContainer.appendChild(cellElement);
+                }
+            }
+
+            return boardContainer;
+        }
+
+        function toggleSelection(event) {
+            const cell = event.target;
+            if (!cell.classList.contains('free')) {
+                cell.classList.toggle('selected');
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const boardSelectContainer = document.getElementById('board-select-container');
+            const selectedBoardContainer = document.getElementById('selected-board');
+            const boardsContainer = document.getElementById('boards-container');
+
+            let boards = localStorage.getItem('bingo_boards');
+            if (!boards) {
+                boards = [];
+                for (let i = 0; i < 100; i++) {
+                    const board = generateBingoBoard();
+                    boards.push(board);
+                }
+                localStorage.setItem('bingo_boards', JSON.stringify(boards));
+            } else {
+                boards = JSON.parse(boards);
+            }
+
+            boards.forEach((board, index) => {
+                const checkbox = document.createElement('input');
+                checkbox.type = 'checkbox';
+                checkbox.id = `board-${index + 1}`;
+                checkbox.value = index;
+                const label = document.createElement('label');
+                label.setAttribute('for', `board-${index + 1}`);
+                label.textContent = index + 1;
+                boardSelectContainer.appendChild(checkbox);
+                boardSelectContainer.appendChild(label);
+            });
+
+            document.getElementById('play-button').addEventListener('click', () => {
+                const checkedCheckboxes = document.querySelectorAll('input[type="checkbox"]:checked');
+                const selectedIndices = Array.from(checkedCheckboxes).map(cb => parseInt(cb.value, 10));
+                if (selectedIndices.length > 0) {
+                    boardsContainer.innerHTML = '';
+                    selectedIndices.forEach(index => {
+                        const board = boards[index];
+                        const transposedBoard = transposeBoard(board);
+                        const boardElement = renderBingoBoard(transposedBoard, index);
+                        boardsContainer.appendChild(boardElement);
+                    });
+                    selectedBoardContainer.classList.remove('hide');
+                } else {
+                    alert('No board selected. Please select at least one board.');
+                }
+            });
+        });
+    </script>
 </body>
 </html>
