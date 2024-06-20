@@ -1,145 +1,114 @@
+function shuffle(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+}
 
-/* script.js */
-        document.addEventListener('DOMContentLoaded', function() {
-            const numberButtons = document.querySelectorAll('.number-button');
-            const betAmountInput = document.getElementById('bet_amount');
-            const selectedNumbersInput = document.getElementById('selected_numbers');
-            const numberOfSelectedNumbersInput = document.getElementById('number_of_selected_numbers');
-            const winningPatternSelect = document.getElementById('winning_pattern');
-            const totalAmountInput = document.getElementById('total_amount');
-            const patternGrid = document.getElementById('pattern_grid');
-            const resetButton = document.getElementById('reset-button');
-            const announcementButton = document.getElementById('announcementButton');
-            const announcementSound = new Audio('/audios/announcement.mp3');
-            const createGameButton = document.getElementById('createGameButton'); // Now targeting by ID
+function generateBingoBoard() {
+    const board = [];
 
-            announcementButton.addEventListener('click', function() {
-                announcementSound.play().catch(e => {
-                    console.error("Error playing sound:", e);
-                    alert('Error playing sound. Please check console for details.');
-                });
-            });
+    const ranges = [
+        Array.from({ length: 15 }, (_, i) => i + 1),  // B row: 1-15
+        Array.from({ length: 15 }, (_, i) => i + 16), // I row: 16-30
+        Array.from({ length: 15 }, (_, i) => i + 31), // N row: 31-45
+        Array.from({ length: 15 }, (_, i) => i + 46), // G row: 46-60
+        Array.from({ length: 15 }, (_, i) => i + 61)  // O row: 61-75
+    ];
 
-            let selectedNumbers = [];
+    ranges.forEach(range => shuffle(range));
 
-            function updateTotalAmount() {
-                const betAmount = parseFloat(betAmountInput.value) || 0;
-                const numberOfSelected = selectedNumbers.length;
-                const totalAmount = betAmount * numberOfSelected;
-                totalAmountInput.value = totalAmount; // Update the hidden input
+    for (let i = 0; i < 5; i++) {
+        const row = [];
+        for (let j = 0; j < 5; j++) {
+            if (i === 2 && j === 2) {
+                row.push('FREE');
+            } else {
+                row.push(ranges[j][i]);
             }
+        }
+        board.push(row);
+    }
 
-            function updateButtonState() {
-                createGameButton.disabled = selectedNumbers.length < 5;
+    return board;
+}
+
+function transposeBoard(board) {
+    const transposedBoard = [];
+
+    for (let i = 0; i < 5; i++) {
+        const row = [];
+        for (let j = 0; j < 5; j++) {
+            row.push(board[j][i]);
+        }
+        transposedBoard.push(row);
+    }
+
+    return transposedBoard;
+}
+
+function renderBingoBoard(board) {
+    const boardContainer = document.createElement('div');
+    boardContainer.classList.add('bingo-board', 'shadow-sm', 'rounded', 'mb-4');
+    
+    const headers = ['B', 'I', 'N', 'G', 'O'];
+    const headerClasses = ['header-b', 'header-i', 'header-n', 'header-g', 'header-o'];
+    headers.forEach((header, index) => {
+        const headerCell = document.createElement('div');
+        headerCell.textContent = header;
+        headerCell.classList.add('header', headerClasses[index]);
+        boardContainer.appendChild(headerCell);
+    });
+
+    for (let i = 0; i < 5; i++) {
+        for (let j = 0; j < 5; j++) {
+            const cellElement = document.createElement('div');
+            cellElement.textContent = board[i][j];
+            if (board[i][j] === 'FREE') {
+                cellElement.classList.add('free');
             }
-            numberButtons.forEach(button => {
-                button.addEventListener('click', function() {
-                    const cardId = this.dataset.cardId;
-                    if (selectedNumbers.includes(cardId)) {
-                        selectedNumbers = selectedNumbers.filter(n => n !== cardId);
-                        this.classList.remove('selected');
-                    } else {
-                        selectedNumbers.push(cardId);
-                        this.classList.add('selected');
-                    }
-                    selectedNumbersInput.value = selectedNumbers.join(',');
-                    numberOfSelectedNumbersInput.value = selectedNumbers.length;
-                    updateTotalAmount(); // Update total amount whenever selection changes
-                    updateButtonState(); // Update the state of the create game button
-                });
-            });
+            boardContainer.appendChild(cellElement);
+        }
+    }
 
-            betAmountInput.addEventListener('input', function() {
-                updateTotalAmount(); // Update total amount on bet amount change
-                updateButtonState(); // Also check button state on input change
-            });
-            winningPatternSelect.addEventListener('change', function() {
-                const selectedOption = this.options[this.selectedIndex];
-                const patternData = JSON.parse(selectedOption.dataset.pattern);
+    return boardContainer;
+}
 
-                clearInterval(window.patternInterval);
+document.addEventListener('DOMContentLoaded', () => {
+    const boardSelectContainer = document.getElementById('board-select-container');
 
-                if (selectedOption.text === 'All Common Patterns') {
-                    let patternIndex = 0;
-                    displayPattern(patternData[patternIndex]);
+    let boards = localStorage.getItem('bingo_boards');
+    if (!boards) {
+        boards = [];
+        for (let i = 0; i < 100; i++) {
+            const board = generateBingoBoard();
+            boards.push(board);
+        }
+        localStorage.setItem('bingo_boards', JSON.stringify(boards));
+    } else {
+        boards = JSON.parse(boards);
+    }
 
-                    window.patternInterval = setInterval(() => {
-                        patternIndex = (patternIndex + 1) % patternData.length;
-                        displayPattern(patternData[patternIndex]);
-                    }, 3000);
-                } else {
-                    displayPattern(patternData);
-                }
-            });
+    boards.forEach((board, index) => {
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.id = `board-${index + 1}`;
+        checkbox.value = index;
+        const label = document.createElement('label');
+        label.setAttribute('for', `board-${index + 1}`);
+        label.textContent = index + 1;
+        boardSelectContainer.appendChild(checkbox);
+        boardSelectContainer.appendChild(label);
+    });
 
-            var toggleBtn = document.querySelector(
-                '.dropdown-toggle');
-            toggleBtn.addEventListener('click', toggleDropdown);
-
-            function toggleDropdown() {
-                var dropdownMenu = document.getElementById('dropdownMenu');
-                if (dropdownMenu.classList.contains('hidden')) {
-                    dropdownMenu.classList.remove('hidden');
-                } else {
-                    dropdownMenu.classList.add('hidden');
-                }
-            }
-
-            // Close dropdown when clicking outside
-            window.addEventListener('click', function(event) {
-                if (!event.target.matches('.bg-gray-500') && !event.target.matches('.dropdown-toggle')) {
-                    var dropdownMenu = document.getElementById('dropdownMenu');
-                    if (dropdownMenu && !dropdownMenu.classList.contains('hidden')) {
-                        dropdownMenu.classList.add('hidden');
-                    }
-                }
-            });
-
-            function displayPattern(pattern) {
-                patternGrid.innerHTML = '';
-                const table = document.createElement('table');
-                const headerRow = document.createElement('tr');
-                const headers = ['B', 'I', 'N', 'G', 'O'];
-
-                headers.forEach(header => {
-                    const th = document.createElement('th');
-                    th.textContent = header;
-                    headerRow.appendChild(th);
-                });
-                table.appendChild(headerRow);
-
-                pattern.forEach((row, rowIndex) => {
-                    const tr = document.createElement('tr');
-                    row.forEach((cell, cellIndex) => {
-                        const td = document.createElement('td');
-                        const div = document.createElement('div');
-                        if (cell || (rowIndex === 2 && cellIndex === 2)) {
-                            div.className = (rowIndex === 2 && cellIndex === 2) ? 'free-spot' :
-                                'circle';
-                        }
-                        td.appendChild(div);
-                        tr.appendChild(td);
-                    });
-                    table.appendChild(tr);
-                });
-
-                patternGrid.appendChild(table);
-            }
-
-            resetButton.addEventListener('click', function() {
-                selectedNumbers = [];
-                numberButtons.forEach(button => {
-                    button.classList.remove('selected');
-                });
-                selectedNumbersInput.value = '';
-                numberOfSelectedNumbersInput.value = 0;
-                updateTotalAmount(); // Reset total amount
-                updateButtonState(); // Reset the state of the create game button
-            });
-
-            // Trigger change event to load the default pattern on page load
-            winningPatternSelect.dispatchEvent(new Event('change'));
-            updateTotalAmount(); // Update total amount on page load
-            updateButtonState();
-
-        });
+    document.getElementById('play-button').addEventListener('click', () => {
+        const checkedCheckboxes = document.querySelectorAll('input[type="checkbox"]:checked');
+        const selectedIndices = Array.from(checkedCheckboxes).map(cb => parseInt(cb.value, 10));
+        if (selectedIndices.length > 0) {
+            localStorage.setItem('selected_bingo_boards', JSON.stringify(selectedIndices));
+            window.location.href = 'selection.html';
+        } else {
+            alert('No board selected. Please select at least one board.');
+        }
+    });
+});
