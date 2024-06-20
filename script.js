@@ -1,130 +1,145 @@
 
 /* script.js */
-document.addEventListener('DOMContentLoaded', () => {
-    const boardSize = 5;
-    const totalBoards = 100;
-    const bingoBoard = document.getElementById('bingo-board');
-    const generateBoardsButton = document.getElementById('generate-boards');
-    const checkBingoButton = document.getElementById('check-bingo');
-    const resetGameButton = document.getElementById('reset-game');
-    const playerNameInput = document.getElementById('player-name');
-    const addPlayerButton = document.getElementById('add-player');
-    const playersContainer = document.getElementById('players');
-    const calledNumbersContainer = document.getElementById('numbers');
-    const boardTable = document.getElementById('board-table');
-    let boards = [];
-    let calledNumbers = [];
-    let currentPlayer = null;
+        document.addEventListener('DOMContentLoaded', function() {
+            const numberButtons = document.querySelectorAll('.number-button');
+            const betAmountInput = document.getElementById('bet_amount');
+            const selectedNumbersInput = document.getElementById('selected_numbers');
+            const numberOfSelectedNumbersInput = document.getElementById('number_of_selected_numbers');
+            const winningPatternSelect = document.getElementById('winning_pattern');
+            const totalAmountInput = document.getElementById('total_amount');
+            const patternGrid = document.getElementById('pattern_grid');
+            const resetButton = document.getElementById('reset-button');
+            const announcementButton = document.getElementById('announcementButton');
+            const announcementSound = new Audio('/audios/announcement.mp3');
+            const createGameButton = document.getElementById('createGameButton'); // Now targeting by ID
 
-    function generateBoards() {
-        boards = [];
-        for (let i = 0; i < totalBoards; i++) {
-            let numbers = Array.from({ length: boardSize * boardSize }, (_, i) => i + 1);
-            numbers = shuffle(numbers);
-            let board = [];
-            for (let j = 0; j < boardSize; j++) {
-                board.push(numbers.slice(j * boardSize, (j + 1) * boardSize));
-            }
-            boards.push(board);
-        }
-        displayBoardSelection();
-    }
-
-    function displayBoardSelection() {
-        boardTable.innerHTML = '';
-        let tableContent = '<tr>';
-        for (let i = 0; i < totalBoards; i++) {
-            if (i % 10 === 0 && i !== 0) {
-                tableContent += '</tr><tr>';
-            }
-            tableContent += <td><button onclick="selectBoard(${i})">Board ${i + 1}</button></td>;
-        }
-        tableContent += '</tr>';
-        boardTable.innerHTML = tableContent;
-    }
-
-    function selectBoard(index) {
-        currentPlayer = index;
-        renderBoard(boards[index]);
-    }
-
-    function renderBoard(board) {
-        bingoBoard.innerHTML = '';
-        for (let row of board) {
-            for (let num of row) {
-                const cell = document.createElement('div');
-                cell.classList.add('bingo-cell');
-                cell.textContent = num;
-                cell.addEventListener('click', () => {
-                    cell.classList.toggle('selected');
+            announcementButton.addEventListener('click', function() {
+                announcementSound.play().catch(e => {
+                    console.error("Error playing sound:", e);
+                    alert('Error playing sound. Please check console for details.');
                 });
-                bingoBoard.appendChild(cell);
+            });
+
+            let selectedNumbers = [];
+
+            function updateTotalAmount() {
+                const betAmount = parseFloat(betAmountInput.value) || 0;
+                const numberOfSelected = selectedNumbers.length;
+                const totalAmount = betAmount * numberOfSelected;
+                totalAmountInput.value = totalAmount; // Update the hidden input
             }
-        }
-    }
 
-    function shuffle(array) {
-        for (let i = array.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [array[i], array[j]] = [array[j], array[i]];
-        }
-        return array;
-    }
-
-    function checkBingo() {
-        const cells = Array.from(document.getElementsByClassName('bingo-cell'));
-        const selectedCells = cells.filter(cell => cell.classList.contains('selected'));
-        if (selectedCells.length < boardSize) return false;
-
-        const selectedNumbers = selectedCells.map(cell => parseInt(cell.textContent));
-        const board = Array.from({ length: boardSize }, (_, row) =>
-            selectedNumbers.slice(row * boardSize, (row + 1) * boardSize)
-        );
-
-        // Check rows
-        for (let row of board) {
-            if (row.every(num => selectedNumbers.includes(num))) {
-                alert('Bingo!');
-                return true;
+            function updateButtonState() {
+                createGameButton.disabled = selectedNumbers.length < 5;
             }
-        }
+            numberButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const cardId = this.dataset.cardId;
+                    if (selectedNumbers.includes(cardId)) {
+                        selectedNumbers = selectedNumbers.filter(n => n !== cardId);
+                        this.classList.remove('selected');
+                    } else {
+                        selectedNumbers.push(cardId);
+                        this.classList.add('selected');
+                    }
+                    selectedNumbersInput.value = selectedNumbers.join(',');
+                    numberOfSelectedNumbersInput.value = selectedNumbers.length;
+                    updateTotalAmount(); // Update total amount whenever selection changes
+                    updateButtonState(); // Update the state of the create game button
+                });
+            });
 
-        // Check columns
-        for (let col = 0; col < boardSize; col++) {
-            const column = board.map(row => row[col]);
-            if (column.every(num => selectedNumbers.includes(num))) {
-                alert('Bingo!');
-                return true;
+            betAmountInput.addEventListener('input', function() {
+                updateTotalAmount(); // Update total amount on bet amount change
+                updateButtonState(); // Also check button state on input change
+            });
+            winningPatternSelect.addEventListener('change', function() {
+                const selectedOption = this.options[this.selectedIndex];
+                const patternData = JSON.parse(selectedOption.dataset.pattern);
+
+                clearInterval(window.patternInterval);
+
+                if (selectedOption.text === 'All Common Patterns') {
+                    let patternIndex = 0;
+                    displayPattern(patternData[patternIndex]);
+
+                    window.patternInterval = setInterval(() => {
+                        patternIndex = (patternIndex + 1) % patternData.length;
+                        displayPattern(patternData[patternIndex]);
+                    }, 3000);
+                } else {
+                    displayPattern(patternData);
+                }
+            });
+
+            var toggleBtn = document.querySelector(
+                '.dropdown-toggle');
+            toggleBtn.addEventListener('click', toggleDropdown);
+
+            function toggleDropdown() {
+                var dropdownMenu = document.getElementById('dropdownMenu');
+                if (dropdownMenu.classList.contains('hidden')) {
+                    dropdownMenu.classList.remove('hidden');
+                } else {
+                    dropdownMenu.classList.add('hidden');
+                }
             }
-        }
 
-        // Check diagonals
-        const diagonal1 = board.map((row, idx) => row[idx]);
-        const diagonal2 = board.map((row, idx) => row[boardSize - idx - 1]);
+            // Close dropdown when clicking outside
+            window.addEventListener('click', function(event) {
+                if (!event.target.matches('.bg-gray-500') && !event.target.matches('.dropdown-toggle')) {
+                    var dropdownMenu = document.getElementById('dropdownMenu');
+                    if (dropdownMenu && !dropdownMenu.classList.contains('hidden')) {
+                        dropdownMenu.classList.add('hidden');
+                    }
+                }
+            });
 
-        if (diagonal1.every(num => selectedNumbers.includes(num)) ||
-            diagonal2.every(num => selectedNumbers.includes(num))) {
-            alert('Bingo!');
-            return true;
-        }
+            function displayPattern(pattern) {
+                patternGrid.innerHTML = '';
+                const table = document.createElement('table');
+                const headerRow = document.createElement('tr');
+                const headers = ['B', 'I', 'N', 'G', 'O'];
 
-        alert('No Bingo!');
-        return false;
-    }
+                headers.forEach(header => {
+                    const th = document.createElement('th');
+                    th.textContent = header;
+                    headerRow.appendChild(th);
+                });
+                table.appendChild(headerRow);
 
-generateBoardsButton.addEventListener('click', generateBoards);
-    checkBingoButton.addEventListener('click', checkBingo);
-    resetGameButton.addEventListener('click', () => {
-        bingoBoard.innerHTML = '';
-        calledNumbersContainer.innerHTML = '';
-        calledNumbers = [];
-        currentPlayer = null;
-        playersContainer.innerHTML = '';
-        playerNameInput.value = '';
-    });
+                pattern.forEach((row, rowIndex) => {
+                    const tr = document.createElement('tr');
+                    row.forEach((cell, cellIndex) => {
+                        const td = document.createElement('td');
+                        const div = document.createElement('div');
+                        if (cell || (rowIndex === 2 && cellIndex === 2)) {
+                            div.className = (rowIndex === 2 && cellIndex === 2) ? 'free-spot' :
+                                'circle';
+                        }
+                        td.appendChild(div);
+                        tr.appendChild(td);
+                    });
+                    table.appendChild(tr);
+                });
 
-    generateBoards();
-});
+                patternGrid.appendChild(table);
+            }
 
-// Expose selectBoard function to the global scope
-window.selectBoard = selectBoard;
+            resetButton.addEventListener('click', function() {
+                selectedNumbers = [];
+                numberButtons.forEach(button => {
+                    button.classList.remove('selected');
+                });
+                selectedNumbersInput.value = '';
+                numberOfSelectedNumbersInput.value = 0;
+                updateTotalAmount(); // Reset total amount
+                updateButtonState(); // Reset the state of the create game button
+            });
+
+            // Trigger change event to load the default pattern on page load
+            winningPatternSelect.dispatchEvent(new Event('change'));
+            updateTotalAmount(); // Update total amount on page load
+            updateButtonState();
+
+        });
