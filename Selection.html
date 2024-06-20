@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Selected Bingo Boards</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .bingo-board {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 5px;
+            width: 100%;
+            margin-bottom: 20px;
+            border: 2px solid blue;
+            padding: 10px;
+            background-color: #f8f9fa;
+        }
+        .bingo-board div {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border: 1px solid blue;
+            background-color: #fff;
+        }
+        .bingo-board .header {
+            font-weight: bold;
+        }
+        .bingo-board .header-b {
+            background-color: red;
+            color: white;
+        }
+        .bingo-board .header-i {
+            background-color: #ffa500;
+            color: white;
+        }
+        .bingo-board .header-n {
+            background-color: #ffff00;
+            color: black;
+        }
+        .bingo-board .header-g {
+            background-color: #008000;
+            color: white;
+        }
+        .bingo-board .header-o {
+            background-color: #0000ff;
+            color: white;
+        }
+        .bingo-board .free {
+            background-color: aqua;
+            color: white;
+        }
+        .board-title {
+            grid-column: span 5;
+            text-align: center;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .custom-select-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(50px, 1fr));
+            gap: 5px;
+        }
+    </style>
+</head>
+<body class="bg-light">
+    <div class="container">
+        <h1 class="text-center my-4">Selected Boards</h1>
+        <div id="boards-container"></div>
+        <div class="text-center mt-4">
+            <a href="index.html" class="btn btn-secondary">Go back to Board Selection</a>
+        </div>
+    </div>
+
+    <script>
+        function transposeBoard(board) {
+            const transposedBoard = [];
+
+            for (let i = 0; i < 5; i++) {
+                const row = [];
+                for (let j = 0; j < 5; j++) {
+                    row.push(board[j][i]);
+                }
+                transposedBoard.push(row);
+            }
+
+            return transposedBoard;
+        }
+
+        function renderBingoBoard(board) {
+            const boardContainer = document.createElement('div');
+            boardContainer.classList.add('bingo-board', 'shadow-sm', 'rounded', 'mb-4');
+            
+            const headers = ['B', 'I', 'N', 'G', 'O'];
+            const headerClasses = ['header-b', 'header-i', 'header-n', 'header-g', 'header-o'];
+            headers.forEach((header, index) => {
+                const headerCell = document.createElement('div');
+                headerCell.textContent = header;
+                headerCell.classList.add('header', headerClasses[index]);
+                boardContainer.appendChild(headerCell);
+            });
+
+            for (let i = 0; i < 5; i++) {
+                for (let j = 0; j < 5; j++) {
+                    const cellElement = document.createElement('div');
+                    cellElement.textContent = board[i][j];
+                    if (board[i][j] === 'FREE') {
+                        cellElement.classList.add('free');
+                    }
+                    boardContainer.appendChild(cellElement);
+                }
+            }
+
+            return boardContainer;
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const boardsContainer = document.getElementById('boards-container');
+
+            const boards = JSON.parse(localStorage.getItem('bingo_boards'));
+            const selectedIndices = JSON.parse(localStorage.getItem('selected_bingo_boards'));
+
+            if (selectedIndices) {
+                selectedIndices.forEach(index => {
+                    const board = boards[index];
+                    const transposedBoard = transposeBoard(board);
+                    const boardElement = renderBingoBoard(transposedBoard);
+                    boardsContainer.appendChild(boardElement);
+                });
+            } else {
+                alert('No boards selected. Please go back and select boards.');
+            }
+        });
+    </script>
+</body>
+</html>
