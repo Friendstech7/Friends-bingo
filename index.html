@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -9,9 +9,20 @@
 <body>
     <div class="container">
         <h1>Bingo Game</h1>
+        <div id="player-info">
+            <label for="player-name">Player Name:</label>
+            <input type="text" id="player-name" placeholder="Enter your name">
+            <button id="add-player">Add Player</button>
+        </div>
+        <div id="players"></div>
         <div id="bingo-board"></div>
+        <div id="called-numbers">
+            <h2>Called Numbers</h2>
+            <div id="numbers"></div>
+        </div>
         <button id="generate-board">Generate New Board</button>
         <button id="check-bingo">Check Bingo</button>
+        <button id="reset-game">Reset Game</button>
     </div>
     <script src="script.js"></script>
 </body>
