@@ -27,6 +27,30 @@
         <button id="generate-boards">Generate Boards</button>
         <button id="check-bingo">Check Bingo</button>
         <button id="reset-game">Reset Game</button>
+<body class="bg-gray-800">
+    <div class="min-h-screen flex items-center justify-center">
+        
+        <div class="relative">
+            <!-- Dropdown Button -->
+            <button class="dropdown-toggle bg-gray-500 w-64 p-4 text-3xl font-bold mb-6">
+                History <!-- You can change the button text or add an icon -->
+            </button>
+
+
+            <!-- Dropdown Menu -->
+            <nav id="dropdownMenu" class="absolute right-0 mt-2 bg-gray-500 w-64 hidden">
+                <ul>
+                    <li class="mb-4">
+                        <a href="https://nexus.dirtechnology.com/branch/history" class="text-lg hover:text-gray-400" style="align-items: center">Transaction History</a>
+                    </li>
+                    <li class="mb-4">
+                        <form method="POST" action="https://nexus.dirtechnology.com/logout">
+                            <input type="hidden" name="_token" value="JffMyofHtFqG4L9AG781QxX1bvg53U1dvbuIgTyG" autocomplete="off">                            <button type="submit" class="text-lg hover:text-gray-400" style="align-items: center">Logout</button>
+                        </form>
+                    </li>
+                </ul>
+            </nav>
+        </div>
     </div>
     <script src="script.js"></script>
 </body>
