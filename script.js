@@ -9,11 +9,11 @@ function generateBingoBoard() {
     const board = [];
 
     const ranges = [
-        Array.from({ length: 15 }, (_, i) => i + 1),  // B row: 1-15
-        Array.from({ length: 15 }, (_, i) => i + 16), // I row: 16-30
-        Array.from({ length: 15 }, (_, i) => i + 31), // N row: 31-45
-        Array.from({ length: 15 }, (_, i) => i + 46), // G row: 46-60
-        Array.from({ length: 15 }, (_, i) => i + 61)  // O row: 61-75
+        Array.from({ length: 5 }, (_, i) => i + 1),   // Row B: 1-5
+        Array.from({ length: 5 }, (_, i) => i + 6),   // Row I: 6-10
+        Array.from({ length: 5 }, (_, i) => i + 11),  // Row N: 11-15
+        Array.from({ length: 5 }, (_, i) => i + 16),  // Row G: 16-20
+        Array.from({ length: 5 }, (_, i) => i + 21)   // Row O: 21-25
     ];
 
     ranges.forEach(range => shuffle(range));
@@ -24,7 +24,7 @@ function generateBingoBoard() {
             if (i === 2 && j === 2) {
                 row.push('FREE');
             } else {
-                row.push(ranges[j][i]);
+                row.push(ranges[i][j]);
             }
         }
         board.push(row);
@@ -112,3 +112,5 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 });
+
+module.exports = { shuffle, generateBingoBoard, transposeBoard };
