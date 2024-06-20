@@ -321,34 +321,21 @@
                                     </div>
             </div>
      
-        <button id="generate-boards">Generate Boards</button>
-        <button id="check-bingo">Check Bingo</button>
-        <button id="reset-game">Reset Game</button>
-<body class="bg-gray-800">
-    <div class="min-h-screen flex items-center justify-center">
-        
-        <div class="relative">
-            <!-- Dropdown Button -->
-            <button class="dropdown-toggle bg-gray-500 w-64 p-4 text-3xl font-bold mb-6">
-                History <!-- You can change the button text or add an icon -->
-            </button>
+                    <!-- Input Fields and Pattern Display -->
+            <div class="w-1/3 pl-10">
+                <form method="POST" action="https://nexus.dirtechnology.com/branch/game-page">
+                    <input type="hidden" name="_token" value="JffMyofHtFqG4L9AG781QxX1bvg53U1dvbuIgTyG" autocomplete="off">
 
 
-            <!-- Dropdown Menu -->
-            <nav id="dropdownMenu" class="absolute right-0 mt-2 bg-gray-500 w-64 hidden">
-                <ul>
-                    <li class="mb-4">
-                        <a href=" class="text-lg hover:text-gray-400" style="align-items: center">Transaction History</a>
-                    </li>
-                    <li class="mb-4">
-                        <form method="POST" action="https://nexus.dirtechnology.com/logout">
-                            <input type="hidden" name="_token" value="JffMyofHtFqG4L9AG781QxX1bvg53U1dvbuIgTyG" autocomplete="off">                            <button type="submit" class="text-lg hover:text-gray-400" style="align-items: center">Logout</button>
-                        </form>
-                    </li>
-                </ul>
-            </nav>
-        </div>
-    </div>
+                    <div class="grid gap-4 mb-4" style="margin-top: 100px; margin-left: 10px;margin-right: 10px;">
+                                                <div>
+                            <label class="block mb-2 text-sm font-medium text-white">Bingo Type</label>
+                            <input type="text" class="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg block w-full p-2.5 placeholder-gray-400" placeholder="75 Bingo" style="width: 250px" disabled="">
+                        </div>
+                        <div>
+                            <label for="bet_amount" class="block mb-2 text-sm font-medium text-white">Bet amount</label>
+                            <input type="text" id="bet_amount" name="bet_amount" class="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg block w-full p-2.5 placeholder-gray-400" placeholder="Enter bet amount" style="width: 250px" value="" required="">
+                        </div>
     <script src="script.js"></script>
 </body>
 </html>
