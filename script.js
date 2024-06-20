@@ -4,7 +4,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const bingoBoard = document.getElementById('bingo-board');
     const generateBoardButton = document.getElementById('generate-board');
     const checkBingoButton = document.getElementById('check-bingo');
-
+     const resetGameButton = document.getElementById('reset-game');
+    const playerNameInput = document.getElementById('player-name');
+    const addPlayerButton = document.getElementById('add-player');
+    const playersContainer = document.getElementById('players');
+    const calledNumbersContainer = document.getElementById('numbers');
+     let players = [];
+    let calledNumbers = [];
+    let currentPlayer = null;
     function generateBoard() {
         bingoBoard.innerHTML = '';
         let numbers = Array.from({ length: boardSize * boardSize }, (_, i) => i + 1);
