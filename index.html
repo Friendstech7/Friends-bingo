@@ -336,6 +336,16 @@
                             <label for="bet_amount" class="block mb-2 text-sm font-medium text-white">Bet amount</label>
                             <input type="text" id="bet_amount" name="bet_amount" class="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg block w-full p-2.5 placeholder-gray-400" placeholder="Enter bet amount" style="width: 250px" value="" required="">
                         </div>
+                    <input type="hidden" name="selected_numbers" id="selected_numbers">
+                    <input type="hidden" name="number_of_selected_numbers" id="number_of_selected_numbers">
+                    <input type="hidden" name="total_amount" id="total_amount" value="0">
+
+                    <button type="submit" id="createGameButton" style="background-color: #019DD6;" class="w-full text-gray-100 font-bold py-2 px-4 rounded mt-4" disabled="">
+                        Create Game
+                    </button>
+                </form>
+
+                <button id="reset-button" class="w-full text-gray-100 font-bold py-2 px-4 rounded mt-4" style="background-color: red;">Reset Board</button>
     <script src="script.js"></script>
 </body>
 </html>
